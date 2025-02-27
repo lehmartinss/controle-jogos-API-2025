@@ -91,7 +91,14 @@ const listarJogo = async function(){
 
 // Função para buscar um jogo
 const buscarJogo = async function(){
+   try {
+      let dadosJogos = {}
 
+      let resultJogo = await jogoDAO.selectByIdJogo()
+      
+   } catch (error) {
+      
+   }
 }
 
 module.exports = {
