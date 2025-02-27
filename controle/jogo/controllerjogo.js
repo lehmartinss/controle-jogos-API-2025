@@ -67,7 +67,7 @@ const listarJogo = async function(){
        //Chama a função para retornar os dados do jogo 
    let resultJogo = await jogoDAO.selectAllJogo()
 
-   if (resultJogo != false){
+   if (resultJogo != false || typeof(resultJogo) == 'object'){
 
    if(resultJogo.length > 0){
       dadosJogos.status = true
