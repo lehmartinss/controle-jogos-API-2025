@@ -13,7 +13,11 @@ const jogoDAO = require('../../model/DAO/jogo.js')
 
 
  // Função para inserir um novo jogo
- const inserirJogo = async function(jogo){
+ const inserirJogo = async function(jogo, contentType){
+   try {
+      if(contentType == 'application/json'){
+
+   
    if(
         jogo.nome            == undefined || jogo.nome            == '' || jogo.nome            == null || jogo.nome.length > 80 ||
         jogo.data_lancamento == undefined || jogo.data_lancamento == '' || jogo.data_lancamento == null || jogo.data_lancamento.length > 10 ||
@@ -31,12 +35,18 @@ const jogoDAO = require('../../model/DAO/jogo.js')
       if(resultJogo)
          return MESSAGE.SUCESS_CREATED_ITEM //201
       else
-      return MESSAGE.ERROR_INTERNAL_SERVER //500
+      return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
 
 
    }
-}
+   }else{
+      return MESSAGE.ERROR_CONTENT_TYPE //415
+   }
 
+} catch (error) {
+      return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
+}
+}
 
  // Função para atualizar um novo jogo 
  const atualizarJogo = async function(){
@@ -50,6 +60,32 @@ const excluirJogo = async function(){
 
 // Função para retornar todos os jogo
 const listarJogo = async function(){
+
+   try {
+      let dadosJogos = {}
+
+       //Chama a função para retornar os dados do jogo 
+   let resultJogo = await jogoDAO.selectAllJogo()
+
+   if (resultJogo != false){
+
+   if(resultJogo.length > 0){
+      dadosJogos.status = true
+      dadosJogos.status_code = 200
+      dadosJogos.items = resultJogo.length
+      dadosJogos.games = resultJogo
+
+      return dadosJogos //200
+   }else{
+      return MESSAGE.ERROR_NOT_FOUND // 404
+   }
+   }else{
+   return MESSAGE.ERROR_INTERNAL_SERVER_MODEL // 500
+   }
+   } catch (error) {
+      return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER // 500
+   }
+   
 
 }
 

@@ -8,11 +8,13 @@
  // Import da biblioteca do prisma client para executar scripts no BD 
 const {PrismaClient} = require('@prisma/client')
 
- // Função para inserir no Banco de Dados um novo jogo
- const insertJogo = async function(jogo){
      //Instancia da classe do prisma client, para gerar um objeto
-    const prisma = new PrismaClient()
+     const prisma = new PrismaClient()
 
+ // Função para inserir no Banco de Dados um novo jogo
+    const insertJogo = async function(jogo){
+    try {
+        
     let sql = `insert into tbl_jogo (
                                     nome,
                                     data_lancamento,
@@ -38,7 +40,13 @@ const {PrismaClient} = require('@prisma/client')
         return true
     else
         return false
- }
+
+    } catch (error) {
+        //console.log(error)
+        return false
+    }
+}
+
 
  // Função para atualizar no Banco de Dados um novo jogo existente
  const updateJogo = async function(){
@@ -52,7 +60,21 @@ const deleteJogo = async function(){
 
 // Função para retornar no Banco de Dados uma lista de  jogo
 const selectAllJogo = async function(){
+    try {
+        
+        // Script SQL para retornar os dados do BD
+        let sql = 'select * from tbl_jogo order by id desc'
 
+        // Executa o scrpt SQL e aguarda o retorno dos dados
+        let result = await prisma.$queryRawUnsafe(sql)
+
+        if(result)
+            return result
+        else
+            return false
+    } catch (error) {
+        return false
+    }
 }
 
 // Função para buscar no Banco de Dados uma jogo pelo ID
