@@ -58,17 +58,38 @@ app.post('/v1/controle-jogos/jogo', cors(), bodyParserJSON, async function (requ
     response.json(resultJogo)
 }) 
 
-app.get('/v1/controle-jogos/jogo/1', cors(), async function (request, response) {
-    // Chama a função para listar os jogos
+//Endpoint para retornar uma lista de jogos
+app.get('/v1/controle-jogos/jogos', cors(), async function(request, response){
+    //Chama a funcao para listar os jogos
     let resultJogo = await controllerJogo.listarJogo()
 
     response.status(resultJogo.status_code)
     response.json(resultJogo)
 })
 
-app.get('/v1/controle-jogos/jogos', cors(), async function(request, response){
+app.get('/v1/controle-jogos/jogo/:id', cors(), async function (request, response) {
 
+    // Recebe content type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+
+    //Recebe o conteudo do body da requisição
+    let id = request.params.id
+
+    // Chama a função para listar os jogos
+    let resultJogo = await controllerJogo.buscarJogo(id)
+
+    response.status(resultJogo.status_code)
+    response.json(resultJogo)
 })
+
+app.delete('/v1/controle-jogos/jogo/deletarjogo/:id',cors(), async function (request, response){
+    let id = request.params.id
+    let resultJogo = await controllerJogo.excluirJogo(id)
+
+    response.status(resultJogo.status_code)
+    response.json(resultJogo)
+})
+    
 app.listen(8080, function(){
     console.log('API aguardando Requisições...')
 })

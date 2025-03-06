@@ -54,8 +54,35 @@ const jogoDAO = require('../../model/DAO/jogo.js')
 }
 
 // Função para excluir um novo jogo 
-const excluirJogo = async function(){
+const excluirJogo = async function(id){
+   try {
 
+      if(id == undefined || id ==  '' || isNaN(id)){
+         return MESSAGE.ERROR_REQUIRED_FIELDS
+      }
+
+      if(id){
+         let verificacao = await jogoDAO.selectByIdJogo(id)
+         let resultJogo = await jogoDAO.deleteJogo(id)
+
+         if (verificacao!= false || typeof(verificacao) == 'object'){
+
+            if(verificacao.length > 0){
+               if(resultJogo){
+                  return MESSAGE.SUCESS_DELETE_ID
+               }else{
+                  return MESSAGE.ERROR_NOT_DELETE
+               }
+            }else{
+               return MESSAGE.ERROR_NOT_FOUND // 404
+            }
+            }else{
+            return MESSAGE.ERROR_INTERNAL_SERVER_MODEL // 500
+            }
+      }
+   } catch (error) {
+      return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER // 500
+   }
 }
 
 // Função para retornar todos os jogo
@@ -90,14 +117,34 @@ const listarJogo = async function(){
 }
 
 // Função para buscar um jogo
-const buscarJogo = async function(){
+const buscarJogo = async function(id){
    try {
       let dadosJogos = {}
 
-      let resultJogo = await jogoDAO.selectByIdJogo()
+      if(id == undefined || id ==  '' || isNaN(id)){
+         return MESSAGE.ERROR_REQUIRED_FIELDS
+      }
+
+      let resultJogo = await jogoDAO.selectByIdJogo(id)
+
+      if (resultJogo != false || typeof(resultJogo) == 'object'){
+
+         if(resultJogo.length > 0){
+            dadosJogos.status = true
+            dadosJogos.status_code = 200
+            dadosJogos.items = resultJogo.length
+            dadosJogos.games = resultJogo
+      
+            return dadosJogos //200
+         }else{
+            return MESSAGE.ERROR_NOT_FOUND // 404
+         }
+         }else{
+         return MESSAGE.ERROR_INTERNAL_SERVER_MODEL // 500
+         }
       
    } catch (error) {
-      
+      return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER // 500
    }
 }
 

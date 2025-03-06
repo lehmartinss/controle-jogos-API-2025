@@ -54,8 +54,16 @@ const {PrismaClient} = require('@prisma/client')
 }
 
 // Função para excluir no Banco de Dados um novo jogo existente
-const deleteJogo = async function(){
+const deleteJogo = async function(id){
+    try {
+        let sql = `delete from tbl_jogo where id = ${id}`
+        let result = await prisma.$executeRawUnsafe(sql)
 
+            return result ? true : false
+
+    } catch (error) {
+        return false
+    }
 }
 
 // Função para retornar no Banco de Dados uma lista de  jogo
@@ -78,12 +86,18 @@ const selectAllJogo = async function(){
 }
 
 // Função para buscar no Banco de Dados uma jogo pelo ID
-const selectByIdJogo = async function(){
+const selectByIdJogo = async function(id){
     try {
-        let sql = 'select * from tbl_jogo order by id desc'
-        let result = await prisma.$param
+        let sql = `select * from tbl_jogo where id = ${id}`
+        let result = await prisma.$queryRawUnsafe(sql)
+
+        if(result.length > 0)
+            return result
+        else
+            return false
+
     } catch (error) {
-        
+        return false
     }
 }
 
