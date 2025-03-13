@@ -17,6 +17,8 @@ const ERROR_NOT_DELETE                 = {status: false, status_code: 400, messa
 /******************************************** MENSAGENS DE SUCESSO ************************************************************************/
  const SUCESS_CREATED_ITEM = {status: true, status_code: 201, message: "Item criado com sucesso"}
  const SUCESS_DELETE_ID    = {status: true, status_code: 200, message: "ID deletado com sucesso"}
+ const SUCESS_UPDATE_ITEM    = {status: true, status_code: 200, message: "Item atualizado com sucesso"}
+
 
 module.exports ={
     ERROR_REQUIRED_FIELDS,
@@ -26,5 +28,6 @@ module.exports ={
     ERROR_NOT_FOUND,
     ERROR_CONTENT_TYPE,
     ERROR_NOT_DELETE,
-    SUCESS_DELETE_ID
+    SUCESS_DELETE_ID,
+    SUCESS_UPDATE_ITEM
 }

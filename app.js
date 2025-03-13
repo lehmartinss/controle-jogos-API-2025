@@ -67,6 +67,7 @@ app.get('/v1/controle-jogos/jogos', cors(), async function(request, response){
     response.json(resultJogo)
 })
 
+// EndPoint para retornar o jogo de acordo com o ID
 app.get('/v1/controle-jogos/jogo/:id', cors(), async function (request, response) {
 
     // Recebe content type para validar o tipo de dados da requisição
@@ -82,6 +83,7 @@ app.get('/v1/controle-jogos/jogo/:id', cors(), async function (request, response
     response.json(resultJogo)
 })
 
+//EndPoint para apagar um jogo de acordo com o ID
 app.delete('/v1/controle-jogos/jogo/deletarjogo/:id',cors(), async function (request, response){
     let id = request.params.id
     let resultJogo = await controllerJogo.excluirJogo(id)
@@ -90,6 +92,22 @@ app.delete('/v1/controle-jogos/jogo/deletarjogo/:id',cors(), async function (req
     response.json(resultJogo)
 })
     
+app.put('/v1/controle-jogos/jogo/:id',cors(), bodyParserJSON, async function (request, response) {
+
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+    //recebe o ID do jogo
+    let idJogo = request.params.id
+    //Recebe os dados do jogo encaminhado no body da requisição
+    let dadosBody = request.body
+
+    let resultJogo = await controllerJogo.atualizarJogo(dadosBody,idJogo,contentType)
+
+    response.status(resultJogo.status_code)
+    response.json(resultJogo)
+})
+
+
 app.listen(8080, function(){
     console.log('API aguardando Requisições...')
 })
