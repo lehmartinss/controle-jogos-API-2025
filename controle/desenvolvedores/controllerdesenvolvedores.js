@@ -11,9 +11,9 @@ const desenvolvedoresDAO = require('../../model/DAO/desenvolvedores.js')
 
    
    if(
-        desenvolvedores.nome            == undefined || desenvolvedores.nome            == '' || desenvolvedores.nome            == null || desenvolvedores.nome.length > 80 ||
-        desenvolvedores.email           == undefined || desenvolvedores.email           == '' || desenvolvedores.email           == null || desenvolvedores.email.length > 10 ||
-        desenvolvedores.cargo           == undefined || desenvolvedores.cargo          == '' || desenvolvedores.cargo            == null || desenvolvedores.cargo.length > 10 
+        desenvolvedores.nome            == undefined || desenvolvedores.nome            == '' || desenvolvedores.nome            == null || desenvolvedores.nome.length > 100 ||
+        desenvolvedores.email           == undefined || desenvolvedores.email           == '' || desenvolvedores.email           == null || desenvolvedores.email.length > 50 ||
+        desenvolvedores.cargo           == undefined || desenvolvedores.cargo          == '' || desenvolvedores.cargo            == null || desenvolvedores.cargo.length > 50 
    ){
       return MESSAGE.ERROR_REQUIRED_FIELDS //400
    }else{
@@ -44,8 +44,8 @@ const desenvolvedoresDAO = require('../../model/DAO/desenvolvedores.js')
 
          if(
             desenvolvedores.nome            == undefined || desenvolvedores.nome            == ''    || desenvolvedores.nome            == null || desenvolvedores.nome.length > 80  ||
-            desenvolvedores.email           == undefined || desenvolvedores.email           == ''    || desenvolvedores.email           == null || desenvolvedores.email.length > 10 ||
-            desenvolvedores.cargo           == undefined || desenvolvedores.cargo           == ''    || desenvolvedores.cargo           == null || desenvolvedores.cargo.length > 10 ||
+            desenvolvedores.email           == undefined || desenvolvedores.email           == ''    || desenvolvedores.email           == null || desenvolvedores.email.length > 50 ||
+            desenvolvedores.cargo           == undefined || desenvolvedores.cargo           == ''    || desenvolvedores.cargo           == null || desenvolvedores.cargo.length > 50 ||
             id                            == undefined || id                              == ''    || id == null                              || isNaN(id)                         || id<=0
 
          ){
@@ -128,6 +128,7 @@ const listarDesenvoldedores = async function(){
     dadosDesenvolvdor.status = true
     dadosDesenvolvdor.status_code = 200
     dadosDesenvolvdor.items = resultdesenvolvedor.length
+    dadosDesenvolvdor.Desenvolvedores = resultdesenvolvedor
 
       return dadosDesenvolvdor //200
    }else{
@@ -160,6 +161,7 @@ const buscarDesenvolvedor = async function(id){
             dadosDesenvolvdor.status = true
             dadosDesenvolvdor.status_code = 200
             dadosDesenvolvdor.items = resultdesenvolvedor.length
+            dadosDesenvolvdor.Desenvolvedores = resultdesenvolvedor
       
             return dadosDesenvolvdor //200
          }else{

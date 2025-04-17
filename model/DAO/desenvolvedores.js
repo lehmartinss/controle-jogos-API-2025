@@ -4,8 +4,8 @@ const {PrismaClient} = require('@prisma/client')
      //Instancia da classe do prisma client, para gerar um objeto
      const prisma = new PrismaClient()
 
- // Função para inserir no Banco de Dados um novo jogo
-    const insertDesenvolvedor = async function(desenvolvedores){
+ // Função para inserir no Banco de Dados um novo desenvolvedor
+const insertDesenvolvedor = async function(desenvolvedores){
     try {
         
     let sql = `insert into tbl_desenvolvedores (

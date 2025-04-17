@@ -25,6 +25,9 @@
 
 // Import das controlles para realizar o CRUD 
  const controllerJogo = require('./controle/jogo/controllerjogo.js')
+ const controllerDesenvolvedores = require('./controle/desenvolvedores/controllerdesenvolvedores.js')
+ const controllerEmpresa = require('./controle/empresa/controllerEmpresa.js')
+ const controllerIdioma = require('./controle/idiomas/controllerIdioma.js')
 
  // Estabelecendo o formado de dados que deverá chegar no body da requisição (POST ou PUT)
  const bodyParserJSON = bodyParser.json()
@@ -108,7 +111,218 @@ app.put('/v1/controle-jogos/jogo/:id',cors(), bodyParserJSON, async function (re
 })
 
 
+
+////////////////////////////////////////////DESENVOLVEDOR///////////////////////////////////////////////////////////////////////
+
+//EndPoint para inserir um desenvolvedor no BD
+app.post('/v1/controle-desenvolvedores/desenvolvedor', cors(), bodyParserJSON, async function (request, response){
+
+    // Recebe content type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+
+    //Recebe o conteudo do body da requisição
+    let dadosBody = request.body 
+
+    // Encaminhando os dados do body da requisição para a controller inserir no BD 
+    let resultdesenvolvedor = await controllerDesenvolvedores.inserirDesenvolvedores(dadosBody, contentType)
+
+    response.status(resultdesenvolvedor.status_code)
+
+    response.json(resultdesenvolvedor)
+}) 
+
+//Endpoint para retornar uma lista de desenvolvedores
+app.get('/v1/controle-desenvolvedores/desenvolvedor', cors(), async function(request, response){
+    //Chama a funcao para listar os  desenvolvedores
+    let resultdesenvolvedor = await controllerDesenvolvedores.listarDesenvoldedores()
+
+    response.status(resultdesenvolvedor.status_code)
+    response.json(resultdesenvolvedor)
+})
+
+// EndPoint para retornar o desenvolvedor de acordo com o ID
+app.get('/v1/controle-desenvolvedores/desenvolvedor/:id', cors(), async function (request, response) {
+
+    // Recebe content type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+
+    //Recebe o conteudo do body da requisição
+    let id = request.params.id
+
+    // Chama a função para listar os jogos
+    let resultdesenvolvedor = await controllerDesenvolvedores.buscarDesenvolvedor(id)
+
+    response.status(resultdesenvolvedor.status_code)
+    response.json(resultdesenvolvedor)
+})
+
+//EndPoint para apagar um desenvolvedor de acordo com o ID
+app.delete('/v1/controle-desenvolvedores/desenvolvedor/:id',cors(), async function (request, response){
+    let id = request.params.id
+    let resultdesenvolvedor = await controllerDesenvolvedores.excluiDesenvolvedor(id)
+
+    response.status(resultdesenvolvedor.status_code)
+    response.json(resultdesenvolvedor)
+})
+
+// EndPoint para atualizar as informacoes de um desenvolvedor de acordo com o ID
+app.put('/v1/controle-desenvolvedores/desenvolvedor/:id',cors(), bodyParserJSON, async function (request, response) {
+
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+    //recebe o ID do desenvolvedor
+    let idDesenvolvedor = request.params.id
+    //Recebe os dados do desenvolvedor encaminhado no body da requisição
+    let dadosBody = request.body
+
+    let resultdesenvolvedor = await controllerDesenvolvedores.atualizarDesenvolvedor(dadosBody,idDesenvolvedor,contentType)
+
+    response.status(resultdesenvolvedor.status_code)
+    response.json(resultdesenvolvedor)
+})
+
+
+//////////////////////////////////////////////////////EMPRESA////////////////////////////////////////////////////////////////////////////////////
+
+//EndPoint para inserir uma empresa no BD
+app.post('/v1/controle-empresa/empresa', cors(), bodyParserJSON, async function (request, response){
+
+    // Recebe content type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+
+    //Recebe o conteudo do body da requisição
+    let dadosBody = request.body 
+
+    // Encaminhando os dados do body da requisição para a controller inserir no BD 
+    let resultEmpresa = await controllerEmpresa.inserirEmpresa(dadosBody, contentType)
+
+    response.status(resultEmpresa.status_code)
+
+    response.json(resultEmpresa)
+}) 
+
+//Endpoint para retornar uma lista de empresas
+app.get('/v1/controle-empresa/empresa', cors(), async function(request, response){
+    //Chama a funcao para listar as empresas
+    let resultEmpresa = await controllerEmpresa.listarEmpresa()
+
+    response.status(resultEmpresa.status_code)
+    response.json(resultEmpresa)
+})
+
+// EndPoint para retornar a empresa de acordo com o ID
+app.get('/v1/controle-empresa/empresa/:id', cors(), async function (request, response) {
+
+    // Recebe content type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+
+    //Recebe o conteudo do body da requisição
+    let id = request.params.id
+
+    // Chama a função para listar as empresas
+    let resultEmpresa = await controllerEmpresa.buscarEmpresa(id)
+
+    response.status(resultEmpresa.status_code)
+    response.json(resultEmpresa)
+})
+
+//EndPoint para apagar uma empresa de acordo com o ID
+app.delete('/v1/controle-empresa/empresa/:id',cors(), async function (request, response){
+    let id = request.params.id
+    let resultEmpresa = await controllerEmpresa.excluirEmpresa(id)
+
+    response.status(resultEmpresa.status_code)
+    response.json(resultEmpresa)
+})
+
+// EndPoint para atualizar as informacoes de uma empresa de acordo com o ID
+app.put('/v1/controle-empresa/empresa/:id',cors(), bodyParserJSON, async function (request, response) {
+
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+    //recebe o ID da empresa
+    let idEmpresa = request.params.id
+    //Recebe os dados da empresa encaminhado no body da requisição
+    let dadosBody = request.body
+
+    let resultEmpresa = await controllerEmpresa.atualizarEmpresa(dadosBody,idEmpresa,contentType)
+
+    response.status(resultEmpresa.status_code)
+    response.json(resultEmpresa)
+})
+
+///////////////////////////////////////////////IDIOMA///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//EndPoint para inserir um idioma no BD
+app.post('/v1/controle-idioma/idioma', cors(), bodyParserJSON, async function (request, response){
+
+    // Recebe content type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+
+    //Recebe o conteudo do body da requisição
+    let dadosBody = request.body 
+
+    // Encaminhando os dados do body da requisição para a controller inserir no BD 
+    let resultIdioma = await controllerIdioma.inserirIdioma(dadosBody, contentType)
+
+    response.status(resultIdioma.status_code)
+
+    response.json(resultIdioma)
+}) 
+
+//Endpoint para retornar uma lista de idiomas
+app.get('/v1/controle-idioma/idioma', cors(), async function(request, response){
+    //Chama a funcao para listar os idiomas
+    let resultIdioma = await controllerIdioma.listarIdioma()
+
+    response.status(resultIdioma.status_code)
+    response.json(resultIdioma)
+})
+
+// EndPoint para retornar o idioma de acordo com o ID
+app.get('/v1/controle-idioma/idioma/:id', cors(), async function (request, response) {
+
+    // Recebe content type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+
+    //Recebe o conteudo do body da requisição
+    let id = request.params.id
+
+    // Chama a função para listar os idiomas
+    let resultIdioma = await controllerIdioma.buscarIdioma(id)
+
+    response.status(resultIdioma.status_code)
+    response.json(resultIdioma)
+})
+
+//EndPoint para apagar um idioma de acordo com o ID
+app.delete('/v1/controle-idioma/idioma/:id',cors(), async function (request, response){
+    let id = request.params.id
+    let resultIdioma = await controllerIdioma.excluirIdioma(id)
+
+    response.status(resultIdioma.status_code)
+    response.json(resultIdioma)
+})
+
+// EndPoint para atualizar as informacoes de um idioma  de acordo com o ID
+app.put('/v1/controle-idioma/idioma/:id',cors(), bodyParserJSON, async function (request, response) {
+
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+    //recebe o ID do idioma
+    let idIdioma = request.params.id
+    //Recebe os dados do idioma encaminhado no body da requisição
+    let dadosBody = request.body
+
+    let resultIdioma = await controllerIdioma.atualizarIdioma(dadosBody,idIdioma,contentType)
+
+    response.status(resultIdioma.status_code)
+    response.json(resultIdioma)
+})
+
+
+
+
 app.listen(8080, function(){
     console.log('API aguardando Requisições...')
 })
-    
