@@ -87,8 +87,8 @@ const excluirIdioma = async function(id){
       }
 
       if(id){
-         let verificacao = await idiomaDAO.selectByIdJogo(id)
-         let resultIdioma = await idiomaDAO.deleteJogo(id)
+         let verificacao = await idiomaDAO.selectByIdIdioma(id)
+         let resultIdioma = await idiomaDAO.deleteIdioma(id)
 
          if (verificacao!= false || typeof(verificacao) == 'object'){
 
@@ -116,7 +116,7 @@ const listarIdioma = async function(){
    try {
       let dadosIdiomas = {}
 
-       //Chama a função para retornar os dados do jogo 
+       //Chama a função para retornar os dados do idioma
    let resultIdioma = await idiomaDAO.selectAllIdioma()
 
    if (resultIdioma != false || typeof(resultIdioma) == 'object'){
@@ -149,7 +149,7 @@ const buscarIdioma = async function(id){
          return MESSAGE.ERROR_REQUIRED_FIELDS
       }
 
-      let resultIdioma = await idiomaDAO.selectByIdJogo(id)
+      let resultIdioma = await idiomaDAO.selectByIdIdioma(id)
 
       if (resultIdioma != false || typeof(resultIdioma) == 'object'){
 

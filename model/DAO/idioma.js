@@ -11,7 +11,7 @@ const prisma = new PrismaClient()
     let sql = `insert into tbl_idioma (
                                     idioma
                                     ) values (
-                                        '${idioma.idioma}
+                                        '${idioma.idioma}'
                                         )`
 
 //Executa o script SQL no BD e AGUARDA o retorno do BD                          

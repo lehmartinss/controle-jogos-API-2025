@@ -28,6 +28,9 @@
  const controllerDesenvolvedores = require('./controle/desenvolvedores/controllerdesenvolvedores.js')
  const controllerEmpresa = require('./controle/empresa/controllerEmpresa.js')
  const controllerIdioma = require('./controle/idiomas/controllerIdioma.js')
+ const controllerUsuario = require('./controle/usuario/controllerUsuario.js')
+
+
 
  // Estabelecendo o formado de dados que deverá chegar no body da requisição (POST ou PUT)
  const bodyParserJSON = bodyParser.json()
@@ -319,6 +322,83 @@ app.put('/v1/controle-idioma/idioma/:id',cors(), bodyParserJSON, async function 
     response.status(resultIdioma.status_code)
     response.json(resultIdioma)
 })
+
+
+
+/////////////////////////////////////////////////// USUARIO ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//EndPoint para inserir um usuario no BD
+app.post('/v1/controle-usuario/usuario', cors(), bodyParserJSON, async function (request, response){
+
+    // Recebe content type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+
+    //Recebe o conteudo do body da requisição
+    let dadosBody = request.body 
+
+    // Encaminhando os dados do body da requisição para a controller inserir no BD 
+    let resultUsuario = await controllerUsuario.inserirUsuario(dadosBody, contentType)
+
+    response.status(resultUsuario.status_code)
+
+    response.json(resultUsuario)
+}) 
+
+//Endpoint para retornar uma lista de usuarios
+app.get('/v1/controle-usuario/usuario', cors(), async function(request, response){
+    //Chama a funcao para listar os usuarios
+    let resultUsuario = await controllerUsuario.listarUsuario()
+
+    response.status(resultUsuario.status_code)
+    response.json(resultUsuario)
+})
+
+// EndPoint para retornar o usuario de acordo com o ID
+app.get('/v1/controle-usuario/usuario/:id', cors(), async function (request, response) {
+
+    // Recebe content type para validar o tipo de dados da requisição
+    let contentType = request.headers['content-type']
+
+    //Recebe o conteudo do body da requisição
+    let id = request.params.id
+
+    // Chama a função para listar os idiomas
+    let resultUsuario = await controllerUsuario.buscarUsuario(id)
+
+    response.status(resultUsuario.status_code)
+    response.json(resultUsuario)
+})
+
+//EndPoint para apagar um usuario de acordo com o ID
+app.delete('/v1/controle-usuario/usuario/:id',cors(), async function (request, response){
+    let id = request.params.id
+    let resultUsuario = await controllerUsuario.excluirUsuario(id)
+
+    response.status(resultUsuario.status_code)
+    response.json(resultUsuario)
+})
+
+// EndPoint para atualizar as informacoes de um usuario  de acordo com o ID
+app.put('/v1/controle-usuario/usuario/:id',cors(), bodyParserJSON, async function (request, response) {
+
+    //Recebe o content-type da requisição
+    let contentType = request.headers['content-type']
+    //recebe o ID do usuario
+    let idUsuario = request.params.id
+    //Recebe os dados do usuario encaminhado no body da requisição
+    let dadosBody = request.body
+
+    let resultUsuario = await controllerUsuario.atualizarUsuario(dadosBody,idUsuario,contentType)
+
+    response.status(resultUsuario.status_code)
+    response.json(resultUsuario)
+})
+
+
+
+
+
+
 
 
 
