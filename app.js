@@ -396,13 +396,6 @@ app.put('/v1/controle-usuario/usuario/:id',cors(), bodyParserJSON, async functio
 
 
 
-
-
-
-
-
-
-
 app.listen(8080, function(){
     console.log('API aguardando Requisições...')
 })

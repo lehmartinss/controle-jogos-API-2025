@@ -40,7 +40,7 @@ const insertDesenvolvedor = async function(desenvolvedores){
                                         email = '${desenvolvedores.email}',
                                         cargo = '${desenvolvedores.cargo}'
                                         
-                                 where id = ${desenvolvedores.id}`
+                                 where id_desenvolvedor = ${desenvolvedores.id}`
 
         let result = await prisma.$executeRawUnsafe(sql)
 
@@ -57,7 +57,7 @@ const insertDesenvolvedor = async function(desenvolvedores){
 // Função para excluir no Banco de Dados um novo desenvolvedor
 const deleteDesenvolvedor = async function(id){
     try {
-        let sql = `delete from tbl_desenvolvedores where id = ${id}`
+        let sql = `delete from tbl_desenvolvedores where id_desenvolvedor = ${id}`
         let result = await prisma.$executeRawUnsafe(sql)
 
             return result ? true : false
@@ -72,7 +72,7 @@ const selectAllDesenvolvedor = async function(){
     try {
         
         // Script SQL para retornar os dados do BD
-        let sql = 'select * from tbl_desenvolvedores order by id desc'
+        let sql = 'select * from tbl_desenvolvedores order by id_desenvolvedor desc'
 
         // Executa o scrpt SQL e aguarda o retorno dos dados
         let result = await prisma.$queryRawUnsafe(sql)
@@ -89,7 +89,7 @@ const selectAllDesenvolvedor = async function(){
 // Função para buscar no Banco de Dados uma jogo pelo ID
 const selectByIdDesenvolvedor = async function(id){
     try {
-        let sql = `select * from tbl_desenvolvedores where id = ${id}`
+        let sql = `select * from tbl_desenvolvedores where id_desenvolvedor = ${id}`
         let result = await prisma.$queryRawUnsafe(sql)
 
         if(result.length > 0)

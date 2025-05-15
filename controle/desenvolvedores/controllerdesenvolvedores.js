@@ -150,6 +150,7 @@ const buscarDesenvolvedor = async function(id){
       let dadosDesenvolvdor = {}
 
       if(id == undefined || id ==  '' || isNaN(id)){
+         console.log(id)
          return MESSAGE.ERROR_REQUIRED_FIELDS
       }
 

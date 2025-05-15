@@ -22,7 +22,9 @@ const {PrismaClient} = require('@prisma/client')
                                     tamanho,
                                     descricao,
                                     foto_capa,
-                                    link
+                                    link,
+                                    id_desenvolvedor,
+                                    id_usuario
                                     ) values (
                                         '${jogo.nome}',
                                         '${jogo.data_lancamento}',
@@ -30,7 +32,9 @@ const {PrismaClient} = require('@prisma/client')
                                         '${jogo.tamanho}',
                                         '${jogo.descricao}',
                                         '${jogo.foto_capa}',
-                                        '${jogo.link}'
+                                        '${jogo.link}',
+                                        '${jogo.id_desenvolvedor}',
+                                        '${jogo.id_usuario}'
                                         )`
 
 //Executa o script SQL no BD e AGUARDA o retorno do BD                          
@@ -58,7 +62,9 @@ const {PrismaClient} = require('@prisma/client')
                                         tamanho = '${jogo.tamanho}',
                                         descricao = '${jogo.descricao}',
                                         foto_capa = '${jogo.foto_capa}',
-                                        link = '${jogo.link}'
+                                        link = '${jogo.link}',
+                                        id_desenvolvedor = '${jogo.id_desenvolvedor}',
+                                        id_usuario = '${jogo.id_usuario}'
                                         
                                  where id = ${jogo.id}`
 

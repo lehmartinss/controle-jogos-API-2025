@@ -9,8 +9,9 @@ create table tbl_jogo (
     tamanho varchar(10),
     descricao text,
     foto_capa varchar(200),
-    link varchar(200)
-
+    link varchar(200),
+    id_desenvolvedor int not null,
+    id_usuario int not null
 );
 
 show tables;
@@ -18,7 +19,7 @@ desc tbl_jogo;
 select * from tbl_jogo;
 
 create table tbl_desenvolvedores (
-id int not null primary key auto_increment,
+id_desenvolvedor int not null primary key auto_increment,
 nome varchar (100) not null,
 email varchar(50) not null,
 cargo varchar (50) not null
@@ -50,7 +51,7 @@ desc tbl_idioma;
 select * from tbl_idioma;
 
 create table tbl_usuario(
-id int not null primary key auto_increment,
+id_usuario int not null primary key auto_increment,
 idade int not null,
 data_inscricao date not null,
 nome varchar(100) not null

@@ -40,7 +40,6 @@ const usuarioDAO = require('../../model/DAO/usuario.js')
 
  // Função para atualizar um novo usuario
  const atualizarUsuario = async function(usuario,id,contentType){
-    console.log(usuario)
    try {
       if(contentType == 'application/json'){
 
@@ -129,7 +128,7 @@ const listarUsuario= async function(){
     dadosUsuario.status = true
     dadosUsuario.status_code = 200
     dadosUsuario.items = resultUsuario.length
-    dadosUsuario.usuarios = resultUsuario
+    dadosUsuario.Usuario = resultUsuario
 
       return dadosUsuario //200
    }else{
@@ -162,7 +161,7 @@ const buscarUsuario = async function(id){
             dadosUsuario.status = true
             dadosUsuario.status_code = 200
             dadosUsuario.items = resultUsuario.length
-            dadosUsuario.games = resultUsuario
+            dadosUsuario.Usuario = resultUsuario
       
             return dadosUsuario //200
          }else{
