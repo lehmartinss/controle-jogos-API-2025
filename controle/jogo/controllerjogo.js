@@ -10,8 +10,6 @@ const MESSAGE = require('../../modulo/config.js')
 
 //Import do DAO para realizar o CRUD  no BD
 const jogoDAO = require('../../model/DAO/jogo.js')
-const controllerdesenvolvedores = require('../desenvolvedores/controllerdesenvolvedores.js')
-const controllerusuario = require('../usuario/controllerUsuario.js')
 
  // Função para inserir um novo jogo
  const inserirJogo = async function(jogo, contentType){
@@ -26,9 +24,7 @@ const controllerusuario = require('../usuario/controllerUsuario.js')
         jogo.tamanho         == undefined || jogo.tamanho == '' || jogo.tamanho.length > 10 ||
         jogo.descricao       == undefined || jogo.descricao == '' ||
         jogo.foto_capa       == undefined || jogo.foto_capa.length > 200 ||
-        jogo.link            == undefined || jogo.link.length > 200 ||
-        jogo.id_desenvolvedor== undefined || jogo.id_desenvolvedor   == '' || jogo.id_desenvolvedor == null|| isNaN(jogo.id_desenvolvedor)                || jogo.id_desenvolvedor<=0 ||
-        jogo.id_usuario      == undefined || jogo.id_usuario      == ''    || jogo.id_usuario == null      || isNaN(jogo.id_usuario)                || jogo.id_usuario<=0
+        jogo.link            == undefined || jogo.link.length > 200 
               
    ){
       return MESSAGE.ERROR_REQUIRED_FIELDS //400
@@ -67,8 +63,6 @@ const controllerusuario = require('../usuario/controllerUsuario.js')
               jogo.descricao       == undefined || jogo.descricao       == ''    ||
               jogo.foto_capa       == undefined || jogo.foto_capa.length > 200   ||
               jogo.link            == undefined || jogo.link.length > 200        ||
-              jogo.id_desenvolvedor== undefined || jogo.id_desenvolvedor   == '' || jogo.id_desenvolvedor == null|| isNaN(jogo.id_desenvolvedor)                || jogo.id_desenvolvedor<=0 ||
-              jogo.id_usuario      == undefined || jogo.id_usuario      == ''    || jogo.id_usuario == null      || isNaN(jogo.id_usuario)                || jogo.id_usuario<=0 ||
               id                   == undefined || id                   == ''    || id == null                   || isNaN(id)                || id<=0
 
          ){
@@ -143,10 +137,6 @@ const listarJogo = async function(){
 
    try {
 
-       //Objeto do tipo array para utilizar no foreach para carregar os dados 
-      //do jogo e do desenvolvedor
-      const arrayJogo = []
-
       let dadosJogos = {}
 
        //Chama a função para retornar os dados do jogo 
@@ -155,48 +145,10 @@ const listarJogo = async function(){
    if (resultJogo != false || typeof(resultJogo) == 'object'){
 
    if(resultJogo.length > 0){
-      //Criando um JSON de retorno de dados para a API
       dadosJogos.status = true
       dadosJogos.status_code = 200
       dadosJogos.items = resultJogo.length
-
-      //resultJogo.forEach(async function(itemJogo){
-      //foi necessário substituir o foreach pelo for of, pois
-      //o foreach não consegue trabalhar com requisições async e await
-
-      for(itemJogo of resultJogo ){
-
-         /**** RETORNA OS DADOS DA CLASSIFICAÇÃO PARA COLOCAR NO RETORNO DO JOGO *****/
-         //Busca os dados da classificação na controller de classificação
-         //Utilizando o ID da classificação (Chave estrangeira)
-         
-         let dadosDesenvolvedor = await controllerdesenvolvedores.buscarDesenvolvedor(itemJogo.id_desenvolvedor)
-         // console.log(dadosDesenvolvedor)
-         
-         //Adicionando um atributo "desenvolvedor" no JSON de jogos
-         itemJogo.desenvolvedores = dadosDesenvolvedor.Desenvolvedores 
-
-         //Remove o atributo id_desenvolvedores do JSON de jogos, pois já temos
-         //o ID dentro dos dados do desenvolvedor
-
-         delete itemJogo.id_desenvolvedor
-         //Adiciona o JSON do jogo, agora com os dados do desenvolvedor
-         //em um array
-
-         let dadosUsuario = await controllerusuario.buscarUsuario(itemJogo.id_usuario)
-         console.log(dadosUsuario);
-         
-
-         itemJogo.usuario = dadosUsuario.Usuario
-
-         delete itemJogo.id_usuario
-
-
-         arrayJogo.push(itemJogo)
-      
-      }
-
-      dadosJogos.games = arrayJogo
+      dadosJogos.games = resultJogo
 
       return dadosJogos //200
    }else{
@@ -215,12 +167,10 @@ const listarJogo = async function(){
 // Função para buscar um jogo
 const buscarJogo = async function(id){
    try {
-      let arrayJogo = []
+      let dadosJogos = {}
 
       if(id == undefined || id ==  '' || isNaN(id)){
          return MESSAGE.ERROR_REQUIRED_FIELDS
-      }else{
-         dadosJogos = {}
       }
 
       let resultJogo = await jogoDAO.selectByIdJogo(id)
@@ -230,45 +180,7 @@ const buscarJogo = async function(id){
             dadosJogos.status = true
             dadosJogos.status_code = 200
             dadosJogos.items = resultJogo.length
-
-            // TABELAS: 1 x N (ID_DESENVOLVEDOR)
-
-            //o foreach não consegue trabalhar com requisições async e await
-            
-            
-            for(itemJogo of resultJogo ){
-
-               /**** RETORNA OS DADOS DA CLASSIFICAÇÃO PARA COLOCAR NO RETORNO DO JOGO *****/
-               //Busca os dados da classificação na controller de classificação
-               //Utilizando o ID da classificação (Chave estrangeira)
-               
-               let dadosDesenvolvedor = await controllerdesenvolvedores.buscarDesenvolvedor(itemJogo.id_desenvolvedor)
-               // console.log(dadosDesenvolvedor)
-               
-               //Adicionando um atributo "desenvolvedor" no JSON de jogos
-               itemJogo.desenvolvedores = dadosDesenvolvedor.Desenvolvedores
-
-               //Remove o atributo id_desenvolvedores do JSON de jogos, pois já temos
-               //o ID dentro dos dados do desenvolvedor
-
-               delete itemJogo.id_desenvolvedor
-               //Adiciona o JSON do jogo, agora com os dados do desenvolvedor
-               //em um array
-
-               let dadosUsuario = await controllerusuario.buscarUsuario(itemJogo.id_usuario)
-               console.log(dadosUsuario);
-               
-
-               itemJogo.usuario = dadosUsuario.Usuario
-
-               delete itemJogo.id_usuario
-
-
-               arrayJogo.push(itemJogo)
-            
-            }
-
-            dadosJogos.games = arrayJogo
+            dadosJogos.games = resultJogo
       
             return dadosJogos //200
          }else{

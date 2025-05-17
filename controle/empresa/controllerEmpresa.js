@@ -3,6 +3,8 @@ const MESSAGE = require('../../modulo/config.js')
 
 //Import do DAO para realizar o CRUD  no BD
 const empresaDAO = require('../../model/DAO/empresa.js')
+const controllerjogo = require('../jogo/controllerjogo.js')
+
 
 
 // Função para inserir uma nova empresa
@@ -15,7 +17,8 @@ const empresaDAO = require('../../model/DAO/empresa.js')
     empresa.nome_empresa        == undefined || empresa.nome_empresa        == '' || empresa.nome_empresa    == null || empresa.nome_empresa.length > 45 ||
     empresa.email               == undefined || empresa.email               == '' || empresa.email           == null || empresa.email.length > 50 ||
     empresa.cnpj                == undefined || empresa.cnpj                == '' || empresa.cnpj            == null || 
-    empresa.telefone            == undefined || empresa.telefone            == '' ||                                    empresa.telefone.length   > 45 
+    empresa.telefone            == undefined || empresa.telefone            == '' ||                                    empresa.telefone.length   > 45 ||
+    empresa.id  == ''           || empresa.id  == undefined
    ){
       return MESSAGE.ERROR_REQUIRED_FIELDS //400
    }else{
@@ -48,7 +51,8 @@ const empresaDAO = require('../../model/DAO/empresa.js')
             empresa.email           == undefined || empresa.email           == ''    || empresa.email                == null || empresa.email.length > 50 ||
             empresa.cnpj            == undefined || empresa.cnpj            == ''    || empresa.cnpj                 == null || 
             empresa.telefone        == undefined || empresa.telefone        == ''    ||                                         empresa.telefone.length     > 45    ||
-            id                   == undefined || id                   == ''    || id == null                   || isNaN(id)                || id<=0
+            id                   == undefined || id                   == ''    || id == null                   || isNaN(id)                || id<=0 ||
+            empresa.id  == ''           || empresa.id  == undefined
 
          ){
             return MESSAGE.ERROR_REQUIRED_FIELDS //400
@@ -119,6 +123,9 @@ const excluirEmpresa = async function(id){
 const listarEmpresa = async function(){
 
    try {
+
+      const arrayEmpresa = []
+
       let dadosEmpresa = {}
 
        //Chama a função para retornar os dados do jogo 
@@ -130,7 +137,19 @@ const listarEmpresa = async function(){
       dadosEmpresa.status = true
       dadosEmpresa.status_code = 200
       dadosEmpresa.items = resultEmpresa.length
-      dadosEmpresa.Empresas = resultEmpresa
+
+      for(itemEmpresa of resultEmpresa ){
+
+         let dadosJogos = await controllerjogo.buscarJogo(itemEmpresa.id)
+
+         itemEmpresa.jogos = dadosJogos.jogos
+           
+         delete itemEmpresa.id
+
+         arrayEmpresa.push(itemEmpresa)
+      }
+
+      dadosEmpresa.Empresas = arrayEmpresa
 
       return dadosEmpresa //200
    }else{
@@ -148,10 +167,12 @@ const listarEmpresa = async function(){
 // Função para buscar uma empresa
 const buscarEmpresa = async function(id){
    try {
-      let dadosEmpresa = {}
+      let arrayEmpresa = []
 
       if(id == undefined || id ==  '' || isNaN(id)){
          return MESSAGE.ERROR_REQUIRED_FIELDS
+      }else{
+         dadosEmpresa = {}
       }
 
       let resultEmpresa = await empresaDAO.selectByIdEmpresa(id)
@@ -162,7 +183,19 @@ const buscarEmpresa = async function(id){
             dadosEmpresa.status = true
             dadosEmpresa.status_code = 200
             dadosEmpresa.items = resultEmpresa.length
-            dadosEmpresa.Empresas = resultEmpresa
+
+         for(itemEmpresa of resultEmpresa ){
+
+            let dadosJogos = await controllerjogo.buscarJogo(itemEmpresa.id)
+
+            itemEmpresa.jogos = dadosJogos.jogos
+           
+            delete itemEmpresa.id
+
+            arrayEmpresa.push(itemEmpresa)
+         }
+
+         dadosEmpresa.Empresas = arrayEmpresa
             
             return dadosEmpresa //200
          }else{

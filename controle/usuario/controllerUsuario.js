@@ -3,6 +3,7 @@ const MESSAGE = require('../../modulo/config.js')
 
 //Import do DAO para realizar o CRUD  no BD
 const usuarioDAO = require('../../model/DAO/usuario.js')
+const controllerjogo = require('../jogo/controllerjogo.js')
 
 
  // Função para inserir um novo usuario
@@ -14,7 +15,8 @@ const usuarioDAO = require('../../model/DAO/usuario.js')
    if(
     usuario.idade            == undefined || usuario.idade            == '' || usuario.idade            == null || 
     usuario.data_inscricao == undefined || usuario.data_inscricao == '' || usuario.data_inscricao == null || usuario.data_inscricao.length > 10 ||
-    usuario.nome          == undefined || usuario.nome          == '' || usuario.nome          == null || usuario.nome.length > 100 
+    usuario.nome          == undefined || usuario.nome          == '' || usuario.nome          == null || usuario.nome.length > 100 ||
+    usuario.id  == ''           || usuario.id  == undefined
       
    ){
       return MESSAGE.ERROR_REQUIRED_FIELDS //400
@@ -46,8 +48,8 @@ const usuarioDAO = require('../../model/DAO/usuario.js')
          if(
             usuario.idade            == undefined || usuario.idade            == ''    || usuario.idade            == null ||
             usuario.data_inscricao == undefined || usuario.data_inscricao == ''    || usuario.data_inscricao == null || usuario.data_inscricao.length > 10 ||
-            usuario.nome          == undefined || usuario.nome          == ''    || usuario.nome          == null || usuario.nome.length > 100 
-           
+            usuario.nome          == undefined || usuario.nome          == ''    || usuario.nome          == null || usuario.nome.length > 100 ||
+            usuario.id  == ''           || usuario.id  == undefined 
          ){
             return MESSAGE.ERROR_REQUIRED_FIELDS //400
          }else{
@@ -117,6 +119,11 @@ const excluirUsuario = async function(id){
 const listarUsuario= async function(){
 
    try {
+
+       //Objeto do tipo array para utilizar no foreach para carregar os dados 
+      //do usuario e do jogo
+      const arrayUsuario = []
+
       let dadosUsuario = {}
 
        //Chama a função para retornar os dados do usuario
@@ -125,10 +132,36 @@ const listarUsuario= async function(){
    if (resultUsuario != false || typeof(resultUsuario) == 'object'){
 
    if(resultUsuario.length > 0){
+      //Criando um JSON de retorno de dados para a API
     dadosUsuario.status = true
     dadosUsuario.status_code = 200
     dadosUsuario.items = resultUsuario.length
-    dadosUsuario.Usuario = resultUsuario
+
+       //resultUsuario.forEach(async function(itemUsuario){
+      //foi necessário substituir o foreach pelo for of, pois
+      //o foreach não consegue trabalhar com requisições async e await
+
+      for(itemUsuario of resultUsuario){
+
+/**** RETORNA OS DADOS DO JOGO PARA COLOCAR NO RETORNO DO USUARIO*****/
+         //Busca os dados do jogo na controller de jogo
+         //Utilizando o ID da jogo (Chave estrangeira)
+
+         let dadosJogos = await controllerjogo.buscarJogo(itemUsuario .id)
+        
+          //Adicionando um atributo "jogo" no JSON de usuario
+          itemUsuario.jogo = dadosJogos.jogo
+
+          //Remove o atributo id do JSON de usuario, pois já temos
+         //o ID dentro dos dados do jogo
+
+         delete itemUsuario.id
+
+         arrayUsuario.push(itemUsuario)
+         
+      }
+
+    dadosUsuario.Usuario = arrayUsuario
 
       return dadosUsuario //200
    }else{
@@ -147,10 +180,13 @@ const listarUsuario= async function(){
 // Função para buscar um usuario
 const buscarUsuario = async function(id){
    try {
-      let dadosUsuario = {}
+
+      let arrayUsuario = []
 
       if(id == undefined || id ==  '' || isNaN(id)){
          return MESSAGE.ERROR_REQUIRED_FIELDS
+      }else{
+         dadosUsuario = {}
       }
 
       let resultUsuario = await usuarioDAO.selectByIdUsuario(id)
@@ -161,7 +197,20 @@ const buscarUsuario = async function(id){
             dadosUsuario.status = true
             dadosUsuario.status_code = 200
             dadosUsuario.items = resultUsuario.length
-            dadosUsuario.Usuario = resultUsuario
+
+             for(itemUsuario of resultUsuario){
+
+                let dadosJogos = await controllerjogo.buscarJogo(itemUsuario .id)
+
+                itemUsuario.jogo = dadosJogos.jogo
+
+                 delete itemUsuario.id
+
+               arrayUsuario.push(itemUsuario)
+
+             }
+
+            dadosUsuario.Usuario = arrayUsuario
       
             return dadosUsuario //200
          }else{

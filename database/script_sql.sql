@@ -9,9 +9,7 @@ create table tbl_jogo (
     tamanho varchar(10),
     descricao text,
     foto_capa varchar(200),
-    link varchar(200),
-    id_desenvolvedor int not null,
-    id_usuario int not null
+    link varchar(200)
 );
 
 show tables;
@@ -34,7 +32,8 @@ id int not null primary key auto_increment,
 nome_empresa varchar (45) not null,
 email varchar(50) not null,
 cnpj int not null,
-telefone varchar(45) not null
+telefone varchar(45) not null,
+id int not null
 );
 
 show tables;
@@ -54,7 +53,8 @@ create table tbl_usuario(
 id_usuario int not null primary key auto_increment,
 idade int not null,
 data_inscricao date not null,
-nome varchar(100) not null
+nome varchar(100) not null,
+id int not null
 );
 
 show tables;
@@ -71,3 +71,16 @@ descricao text (200)
 show tables;
 desc tbl_categoria;
 select * from tbl_categoria;
+
+create table tbl_jogo_desenvolvedor (
+	id_jogo_desenvolvedor int not null primary key auto_increment,
+    id		int not null,
+    id_desenvolvedor int	not null,
+	constraint FK_JOGO_JOGO_DESENVOLVEDOR
+    foreign key (id) 
+    references tbl_jogo(id),
+    
+    constraint FK_DESENVOLVEDOR_JOGO_DESENVOLVEDOR
+    foreign key (id_desenvolvedor) 
+    references tbl_desenvolvedores(id)
+);
