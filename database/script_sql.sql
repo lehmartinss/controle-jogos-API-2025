@@ -28,12 +28,14 @@ desc tbl_desenvolvedores;
 select * from tbl_desenvolvedores;
 
 create table tbl_empresa(
-id int not null primary key auto_increment,
+id_empresa int not null primary key auto_increment,
 nome_empresa varchar (45) not null,
 email varchar(50) not null,
 cnpj int not null,
 telefone varchar(45) not null,
-id int not null
+id int not null,
+foreign key (id) 
+    references tbl_jogo(id)
 );
 
 show tables;
@@ -54,23 +56,14 @@ id_usuario int not null primary key auto_increment,
 idade int not null,
 data_inscricao date not null,
 nome varchar(100) not null,
-id int not null
+id int not null,
+foreign key (id) 
+    references tbl_jogo(id)
 );
 
 show tables;
 desc tbl_usuario;
 select * from tbl_usuario;
-
-create table tbl_categoria(
-id int not null primary key auto_increment,
-nome_categoria varchar (100) not null,
-publico_alvo varchar(45) not null,
-descricao text (200)
-);
-
-show tables;
-desc tbl_categoria;
-select * from tbl_categoria;
 
 create table tbl_jogo_desenvolvedor (
 	id_jogo_desenvolvedor int not null primary key auto_increment,
@@ -82,5 +75,18 @@ create table tbl_jogo_desenvolvedor (
     
     constraint FK_DESENVOLVEDOR_JOGO_DESENVOLVEDOR
     foreign key (id_desenvolvedor) 
-    references tbl_desenvolvedores(id)
+    references tbl_desenvolvedores(id_desenvolvedor)
+);
+
+create table tbl_jogo_idioma(
+	id_jogo_idioma int not null primary key auto_increment,
+    id		int not null,
+    id_idioma int	not null,
+	constraint FK_JOGO_JOGO_IDIOMA
+    foreign key (id) 
+    references tbl_jogo(id),
+    
+    constraint FK_IDIOMA_JOGO_DESENVOLVEDOR
+    foreign key (id_idioma) 
+    references tbl_idioma(id_idioma)
 );

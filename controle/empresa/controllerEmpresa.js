@@ -142,7 +142,7 @@ const listarEmpresa = async function(){
 
          let dadosJogos = await controllerjogo.buscarJogo(itemEmpresa.id)
 
-         itemEmpresa.jogos = dadosJogos.jogos
+         itemEmpresa.jogos = dadosJogos.games
            
          delete itemEmpresa.id
 
@@ -188,7 +188,7 @@ const buscarEmpresa = async function(id){
 
             let dadosJogos = await controllerjogo.buscarJogo(itemEmpresa.id)
 
-            itemEmpresa.jogos = dadosJogos.jogos
+            itemEmpresa.jogos = dadosJogos.games
            
             delete itemEmpresa.id
 

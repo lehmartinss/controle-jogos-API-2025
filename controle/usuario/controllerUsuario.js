@@ -142,16 +142,17 @@ const listarUsuario= async function(){
       //o foreach não consegue trabalhar com requisições async e await
 
       for(itemUsuario of resultUsuario){
+         
 
 /**** RETORNA OS DADOS DO JOGO PARA COLOCAR NO RETORNO DO USUARIO*****/
          //Busca os dados do jogo na controller de jogo
          //Utilizando o ID da jogo (Chave estrangeira)
 
-         let dadosJogos = await controllerjogo.buscarJogo(itemUsuario .id)
+         let dadosJogos = await controllerjogo.buscarJogo(itemUsuario.id)
         
           //Adicionando um atributo "jogo" no JSON de usuario
-          itemUsuario.jogo = dadosJogos.jogo
-
+          itemUsuario.jogo = dadosJogos.games
+        
           //Remove o atributo id do JSON de usuario, pois já temos
          //o ID dentro dos dados do jogo
 
@@ -202,7 +203,7 @@ const buscarUsuario = async function(id){
 
                 let dadosJogos = await controllerjogo.buscarJogo(itemUsuario .id)
 
-                itemUsuario.jogo = dadosJogos.jogo
+                itemUsuario.jogo = dadosJogos.games
 
                  delete itemUsuario.id
 

@@ -14,12 +14,14 @@ const {PrismaClient} = require('@prisma/client')
                                     nome_empresa,
                                     email,
                                     cnpj,
-                                    telefone
+                                    telefone,
+                                    id
                                     ) values (
                                         '${empresa.nome_empresa}',
                                         '${empresa.email}',
                                         '${empresa.cnpj}',
-                                        '${empresa.telefone}'
+                                        '${empresa.telefone}',
+                                        '${empresa.id}'
                                         )`
 
 //Executa o script SQL no BD e AGUARDA o retorno do BD                          
@@ -31,7 +33,6 @@ const {PrismaClient} = require('@prisma/client')
         return false
 
     } catch (error) {
-        console.log(error)
         return false
     }
 }
@@ -43,8 +44,9 @@ const {PrismaClient} = require('@prisma/client')
                                         nome_empresa = '${empresa.nome_empresa}',
                                         email = '${empresa.email}',
                                         cnpj = '${empresa.cnpj}',
-                                        telefone = '${empresa.telefone}'
-                                 where id = ${empresa.id}`
+                                        telefone = '${empresa.telefone}',
+                                        id = '${empresa.id}'
+                                 where id_empresa = ${empresa.id_empresa}`
 
         let result = await prisma.$executeRawUnsafe(sql)
 
@@ -61,7 +63,7 @@ const {PrismaClient} = require('@prisma/client')
 // Função para excluir no Banco de Dados uma nova empresa existente
 const deleteEmpresa = async function(id){
     try {
-        let sql = `delete from tbl_empresa where id = ${id}`
+        let sql = `delete from tbl_empresa where id_empresa = ${id}`
         let result = await prisma.$executeRawUnsafe(sql)
 
             return result ? true : false
@@ -76,7 +78,7 @@ const selectAllEmpresa = async function(){
     try {
         
         // Script SQL para retornar os dados do BD
-        let sql = 'select * from tbl_empresa order by id desc'
+        let sql = 'select * from tbl_empresa order by id_empresa desc'
 
         // Executa o scrpt SQL e aguarda o retorno dos dados
         let result = await prisma.$queryRawUnsafe(sql)
@@ -93,7 +95,7 @@ const selectAllEmpresa = async function(){
 // Função para buscar no Banco de Dados uma empresa pelo ID
 const selectByIdEmpresa = async function(id){
     try {
-        let sql = `select * from tbl_empresa where id = ${id}`
+        let sql = `select * from tbl_empresa where id_empresa = ${id}`
         let result = await prisma.$queryRawUnsafe(sql)
 
         if(result.length > 0)

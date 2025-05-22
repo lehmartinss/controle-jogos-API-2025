@@ -150,16 +150,19 @@ const listarJogo = async function(){
       dadosJogos.status = true
       dadosJogos.status_code = 200
       dadosJogos.items = resultJogo.length
-      dadosJogos.games = resultJogo
+      let listaJogo = []
 
-
+      for(jogos of resultJogo){
       /**** RETORNA OS DADOS DO DESENVOLVEDOR PARA COLOCAR NO RETORNO DO JOGO *****/
-         let dadosDesenvolvdor = await controllerJogoDesenvolvedor.buscarDesenvolvedorPorJogo(itemJogo.id)
-         itemJogo.Desenvolvedor = dadosDesenvolvdor.Desenvolvedor
+         let dadosDesenvolvdor = await controllerJogoDesenvolvedor.buscarDesenvolvedorPorJogo(jogos.id)
+         jogos.Desenvolvedor = dadosDesenvolvdor.Desenvolvedor
 
           /**** RETORNA OS DADOS DO IDIOMA PARA COLOCAR NO RETORNO DO JOGO *****/
-         let dadosIdiomas = await controllerJogoIdioma.buscarIdiomaPorJogo(itemJogo.id)
-         itemJogo.Idiomas = dadosIdiomas.Idiomas
+         let dadosIdiomas = await controllerJogoIdioma.buscarIdiomaPorJogo(jogos.id)
+         jogos.Idiomas = dadosIdiomas.Idiomas
+         listaJogo.push(jogos)
+      }
+      dadosJogos.games = listaJogo
 
       return dadosJogos //200
    }else{
@@ -168,7 +171,7 @@ const listarJogo = async function(){
    }else{
    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL // 500
    }
-   } catch (error) {
+   } catch (error) {      
       return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER // 500
    }
    

@@ -34,7 +34,7 @@ const prisma = new PrismaClient()
         let sql = ` update tbl_idioma set
                                         idioma = '${idioma.idioma}'
                                     
-                                 where id = ${idioma.id}`
+                                 where id_idioma = ${idioma.id_idioma}`
 
         let result = await prisma.$executeRawUnsafe(sql)
 
@@ -51,7 +51,7 @@ const prisma = new PrismaClient()
 // Função para excluir no Banco de Dados um novo idioma existente
 const deleteIdioma = async function(id){
     try {
-        let sql = `delete from tbl_idioma where id = ${id}`
+        let sql = `delete from tbl_idioma where id_idioma = ${id}`
         let result = await prisma.$executeRawUnsafe(sql)
 
             return result ? true : false
@@ -66,7 +66,7 @@ const selectAllIdioma = async function(){
     try {
         
         // Script SQL para retornar os dados do BD
-        let sql = 'select * from tbl_idioma order by id desc'
+        let sql = 'select * from tbl_idioma order by id_idioma desc'
 
         // Executa o scrpt SQL e aguarda o retorno dos dados
         let result = await prisma.$queryRawUnsafe(sql)
@@ -83,7 +83,7 @@ const selectAllIdioma = async function(){
 // Função para buscar no Banco de Dados um idioma pelo ID
 const selectByIdIdioma = async function(id){
     try {
-        let sql = `select * from tbl_idioma where id = ${id}`
+        let sql = `select * from tbl_idioma where id_idioma = ${id}`
         let result = await prisma.$queryRawUnsafe(sql)
 
         if(result.length > 0)

@@ -11,11 +11,13 @@ const {PrismaClient} = require('@prisma/client')
     let sql = `insert into tbl_usuario (
                                     idade,
                                     data_inscricao,
-                                    nome
+                                    nome,
+                                    id
                                     ) values (
                                         '${usuario.idade}',
                                         '${usuario.data_inscricao}',
-                                        '${usuario.nome}'
+                                        '${usuario.nome}',
+                                        '${usuario.id}'
                                         )`
 
 //Executa o script SQL no BD e AGUARDA o retorno do BD                          
@@ -27,7 +29,7 @@ const {PrismaClient} = require('@prisma/client')
         return false
 
     } catch (error) {
-        //console.log(error)
+        console.log(error)
         return false
     }
 }
@@ -39,9 +41,10 @@ const {PrismaClient} = require('@prisma/client')
         let sql = ` update tbl_usuario set
                                         idade = '${usuario.idade}',
                                         data_inscricao = '${usuario.data_inscricao}',
-                                        nome = '${usuario.nome}'
+                                        nome = '${usuario.nome}',
+                                        id = '${usuario.id}'
                                         
-                                 where id_usuario = ${usuario.id}`
+                                 where id_usuario = ${usuario.id_usuario}`
 
         let result = await prisma.$executeRawUnsafe(sql)
 
@@ -83,6 +86,8 @@ const selectAllUsuario = async function(){
         else
             return false
     } catch (error) {
+        console.log(error);
+        
         return false
     }
 }
@@ -99,6 +104,7 @@ const selectByIdUsuario = async function(id){
             return false
 
     } catch (error) {
+        console.log(error);
         return false
     }
 }
