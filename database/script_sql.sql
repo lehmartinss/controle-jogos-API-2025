@@ -41,7 +41,7 @@ desc tbl_empresa;
 select * from tbl_empresa;
 
 create table tbl_idioma(
-id int not null primary key auto_increment,
+id_idioma int not null primary key auto_increment,
 idioma varchar (45) not null
 );
 

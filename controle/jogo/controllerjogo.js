@@ -10,6 +10,8 @@ const MESSAGE = require('../../modulo/config.js')
 
 //Import do DAO para realizar o CRUD  no BD
 const jogoDAO = require('../../model/DAO/jogo.js')
+const  controllerJogoDesenvolvedor = require('../jogo/controllerJogoDesenvolvedor.js')
+const controllerJogoIdioma = require('../jogo/controllerJogoIdioma.js')
 
  // Função para inserir um novo jogo
  const inserirJogo = async function(jogo, contentType){
@@ -149,6 +151,15 @@ const listarJogo = async function(){
       dadosJogos.status_code = 200
       dadosJogos.items = resultJogo.length
       dadosJogos.games = resultJogo
+
+
+      /**** RETORNA OS DADOS DO DESENVOLVEDOR PARA COLOCAR NO RETORNO DO JOGO *****/
+         let dadosDesenvolvdor = await controllerJogoDesenvolvedor.buscarDesenvolvedorPorJogo(itemJogo.id)
+         itemJogo.Desenvolvedor = dadosDesenvolvdor.Desenvolvedor
+
+          /**** RETORNA OS DADOS DO IDIOMA PARA COLOCAR NO RETORNO DO JOGO *****/
+         let dadosIdiomas = await controllerJogoIdioma.buscarIdiomaPorJogo(itemJogo.id)
+         itemJogo.Idiomas = dadosIdiomas.Idiomas
 
       return dadosJogos //200
    }else{

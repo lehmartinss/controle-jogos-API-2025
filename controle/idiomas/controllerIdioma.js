@@ -42,7 +42,7 @@ const idiomaDAO = require('../../model/DAO/idioma.js')
 
          if(
             idioma.idioma            == undefined || idioma.idioma            == ''    || idioma.idioma           == null || idioma.idioma.length > 45 ||
-              id                   == undefined || id                   == ''    || id == null                   || isNaN(id)                || id<=0
+            id                   == undefined || id                   == ''    || id == null                   || isNaN(id)                || id<=0
 
          ){
             return MESSAGE.ERROR_REQUIRED_FIELDS //400

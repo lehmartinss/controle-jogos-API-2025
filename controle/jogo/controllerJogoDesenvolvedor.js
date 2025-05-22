@@ -18,7 +18,7 @@ const inserirJogoDesenvolvedor = async function(JogoDesenvolvedor, contentType){
    
    if(
         JogoDesenvolvedor.id_filme              == ''           || JogoDesenvolvedor.id_filme     == undefined    || JogoDesenvolvedor.id_filme  == null || isNaN(JogoDesenvolvedor.id_filme)  || JogoDesenvolvedor.id_filme <=0 ||
-        JogoDesenvolvedor.id_genero             == ''           || JogoDesenvolvedor.id_genero    == undefined    || JogoDesenvolvedor.id_genero == null || isNaN(JogoDesenvolvedor.id_genero) || JogoDesenvolvedor.id_genero<=0
+        JogoDesenvolvedor.id_desenvolvedor            == ''           || JogoDesenvolvedor.id_desenvolvedor    == undefined    || JogoDesenvolvedor.id_desenvolvedor == null || isNaN(JogoDesenvolvedor.id_desenvolvedor) || JogoDesenvolvedor.id_desenvolvedor<=0
               
    ){
       return MESSAGE.ERROR_REQUIRED_FIELDS //400
@@ -130,7 +130,7 @@ const listarJogoDesenvolvedor = async function(){
                 dadosDesenvolvdor.status = true
                 dadosDesenvolvdor.status_code = 200
                 dadosDesenvolvdor.items = resultdesenvolvedor.length
-                dadosDesenvolvdor.films = resultdesenvolvedor
+                dadosDesenvolvdor.Desenvolvedores = resultdesenvolvedor
 
                 return dadosDesenvolvdor
             }else{
@@ -158,7 +158,7 @@ const buscarJogoDesenvolvedor = async function(id){
                      //Criando um JSON de retorno de dados para a API
                      dadosDesenvolvdor.status = true
                      dadosDesenvolvdor.status_code = 200
-                     dadosDesenvolvdor.genero = resultdesenvolvedor
+                     dadosDesenvolvdor.Desenvolvedores = resultdesenvolvedor
 
                     return  dadosDesenvolvdor //200
                 }else{
