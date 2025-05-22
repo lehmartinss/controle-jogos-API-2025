@@ -35,7 +35,7 @@ const updateJogoIdioma = async function(JogoIdioma){
                                                     id       = ${JogoIdioma.id},
                                                     id_idioma    = ${JogoIdioma.id_idioma}
                                         
-                            where id = ${JogoIdioma.id}                
+                            where id_jogo_idioma = ${JogoIdioma.id}                
                             `
       let resultJogoIdioma = await prisma.$executeRawUnsafe(sql)
 
@@ -50,7 +50,7 @@ const updateJogoIdioma = async function(JogoIdioma){
 
 const deleteJogoIdioma = async function(id){
   try {
-    let sql = `delete from tbl_jogo_idioma where id = ${id}`
+    let sql = `delete from tbl_jogo_idioma where id_jogo_idioma = ${id}`
 
     let result = await prisma.$executeRawUnsafe(sql)
 
@@ -66,7 +66,7 @@ const deleteJogoIdioma = async function(id){
 const selectAllJogoIdioma = async function(){
 
     try {
-      let sql = 'select * from tbl_jogo_idioma order by id desc'
+      let sql = 'select * from tbl_jogo_idioma order by id_jogo_idioma desc'
 
       let result = await prisma.$queryRawUnsafe(sql)
 
@@ -82,7 +82,7 @@ const selectAllJogoIdioma = async function(){
 
 const selectByIdJogoIdioma = async function(id){
   try {
-    let sql = `select * from tbl_jogo_idioma where id = ${id}`
+    let sql = `select * from tbl_jogo_idioma where id_jogo_idioma = ${id}`
 
     let result = await prisma.$queryRawUnsafe(sql)
 
@@ -97,12 +97,7 @@ const selectByIdJogoIdioma = async function(id){
 
 const selectIdiomaByIdJogo = async function(idJogo){
   try {
-      let sql = `select tbl_idioma.* from tbl_jogo 
-                          inner join tbl_jogo_idioma
-                            on tbl_jogo.id = tbl_jogo_idioma.id
-                          inner join tbl_idioma
-                            on tbl_idioma.id = tbl_jogo_idioma.id_idioma
-                      where tbl_jogo.id = ${idJogo}`
+      let sql = `select * from tbl_jogo_idioma where id = ${idJogo}`
 
       let result = await prisma.$queryRawUnsafe(sql)
 
@@ -117,12 +112,7 @@ const selectIdiomaByIdJogo = async function(idJogo){
 
 const selectJogoByIdIdioma = async function(idIdioma){
   try {
-      let sql = `select tbl_jogo.* from tbl_jogo 
-                          inner join tbl_jogo_idioma
-                            on tbl_jogo.id = tbl_jogo_idioma.id
-                          inner join tbl_idioma
-                            on tbl_idioma.id = tbl_jogo_idioma.id_idioma
-                      where tbl_idioma.id = ${idIdioma}`
+      let sql = `select * from tbl_jogo_idioma where id_idioma = ${idIdioma}`
 
       let result = await prisma.$queryRawUnsafe(sql)
 

@@ -2,6 +2,7 @@
 const MESSAGE = require('../../modulo/config.js')
 
 const JogoIdiomaDAO = require('../../model/DAO/jogo_idioma.js')
+const controlleridioma = require('../idiomas/controllerIdioma.js')
 
 const inserirJogoidioma = async function(JogoIdioma, contentType){
    try {
@@ -9,7 +10,7 @@ const inserirJogoidioma = async function(JogoIdioma, contentType){
 
    
    if(
-        JogoIdioma.id_filme              == ''           || JogoIdioma.id_filme     == undefined    || JogoIdioma.id_filme  == null || isNaN(JogoIdioma.id_filme)  || JogoIdioma.id_filme <=0 ||
+        JogoIdioma.id            == ''           || JogoIdioma.id    == undefined    || JogoIdioma.id == null || isNaN(JogoIdioma.id)  || JogoIdioma.id <=0 ||
         JogoIdioma.id_idioma            == ''           || JogoIdioma.id_idioma   == undefined    || JogoIdioma.id_idioma == null || isNaN(JogoIdioma.id_idioma) || JogoIdioma.id_idioma<=0
               
    ){
@@ -51,7 +52,7 @@ const atualizarJogoidioma = async function(id, JogoIdioma, contentType){
                         if(resultIdioma.length > 0 ){
                             //Update
                             //Adiciona o ID do genero no JSON com os dados
-                           idioma.id_idioma = parseInt(id)
+                            JogoIdioma.id_idioma = parseInt(id)
 
                             let result = await JogoIdiomaDAO.updateJogoIdioma (JogoIdioma)
 
@@ -167,6 +168,8 @@ const buscarJogoIdioma = async function(id){
 
 const buscarIdiomaPorJogo = async function(idJogo){
     try {
+
+        let arrayIdioma = []
         if(idJogo == '' || idJogo == undefined || idJogo == null || isNaN(idJogo) || idJogo <=0){
             return MESSAGE.ERROR_REQUIRED_FIELDS //400
         }else{
@@ -179,7 +182,22 @@ const buscarIdiomaPorJogo = async function(idJogo){
                      //Criando um JSON de retorno de dados para a API
                     dadosIdiomas.status = true
                     dadosIdiomas.status_code = 200
-                    dadosIdiomas.Idiomas = resultIdioma
+
+                      for(item of resultIdioma ){
+                                            
+                        let dadosIdiomas = await controlleridioma.buscarIdioma(item.id_idioma)
+                                    
+                        item.Idiomas = dadosIdiomas.Idiomas
+                              
+                        delete item.id_jogo_idioma
+                        delete item.id_idioma
+                        delete item.id
+                      
+                                           
+                        arrayIdioma.push(item)
+                    }
+
+                    dadosIdiomas.Idiomas =  arrayIdioma
 
                     return dadosIdiomas //200
                 }else{

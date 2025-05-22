@@ -33,9 +33,7 @@ const controllerJogoIdioma = require('../jogo/controllerJogoIdioma.js')
    }else{
       // Encaminha os dados do novo jogo para ser inserido no BD 
       let resultJogo = await jogoDAO.insertJogo(jogo)
-      console.log(jogo);
-      
-
+ 
       if(resultJogo)
          return MESSAGE.SUCESS_CREATED_ITEM //201
       else
@@ -155,11 +153,12 @@ const listarJogo = async function(){
       for(jogos of resultJogo){
       /**** RETORNA OS DADOS DO DESENVOLVEDOR PARA COLOCAR NO RETORNO DO JOGO *****/
          let dadosDesenvolvdor = await controllerJogoDesenvolvedor.buscarDesenvolvedorPorJogo(jogos.id)
-         jogos.Desenvolvedor = dadosDesenvolvdor.Desenvolvedor
-
+         jogos.Desenvolvedores = dadosDesenvolvdor.Desenvolvedores
+      
           /**** RETORNA OS DADOS DO IDIOMA PARA COLOCAR NO RETORNO DO JOGO *****/
          let dadosIdiomas = await controllerJogoIdioma.buscarIdiomaPorJogo(jogos.id)
          jogos.Idiomas = dadosIdiomas.Idiomas
+         
          listaJogo.push(jogos)
       }
       dadosJogos.games = listaJogo
@@ -171,7 +170,8 @@ const listarJogo = async function(){
    }else{
    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL // 500
    }
-   } catch (error) {      
+   } catch (error) {    
+
       return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER // 500
    }
    

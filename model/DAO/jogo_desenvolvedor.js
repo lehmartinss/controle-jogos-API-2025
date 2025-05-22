@@ -38,7 +38,7 @@ const updateJogoDesenvolvedor = async function(JogoDesenvolvedor){
                                                     id       = ${JogoDesenvolvedor.id},
                                                     id_desenvolvedor    = ${JogoDesenvolvedor.id_desenvolvedor}
                                         
-                            where id = ${JogoDesenvolvedor.id}                
+                            where id_jogo_desenvolvedor = ${JogoDesenvolvedor.id}                
                             `
       let resultJogoDesenvolvedor = await prisma.$executeRawUnsafe(sql)
 
@@ -54,7 +54,7 @@ const updateJogoDesenvolvedor = async function(JogoDesenvolvedor){
 
 const deleteJogoDesenvolvedor = async function(id){
   try {
-    let sql = `delete from tbl_jogo_desenvolvedor where id = ${id}`
+    let sql = `delete from tbl_jogo_desenvolvedor where id_jogo_desenvolvedor = ${id}`
 
     let result = await prisma.$executeRawUnsafe(sql)
 
@@ -72,7 +72,7 @@ const selectAllJogoDesenvolvedor = async function(){
 
     try {
       //ScriptSQL para retornar todos os dados
-      let sql = 'select * from tbl_jogo_dsenvolvedor order by id desc'
+      let sql = 'select * from tbl_jogo_dsenvolvedor order by id_jogo_desenvolvedor desc'
 
       //Executa o scriptSQL no BD e aguarda o retorno dos dados
       let result = await prisma.$queryRawUnsafe(sql)
@@ -89,7 +89,7 @@ const selectAllJogoDesenvolvedor = async function(){
 
 const selectByIdJogoDesenvolvedor = async function(id){
   try {
-    let sql = `select * from tbl_jogo_denvolvedor where id = ${id}`
+    let sql = `select * from tbl_jogo_desenvolvedor where id_jogo_desenvolvedor = ${id}`
 
     let result = await prisma.$queryRawUnsafe(sql)
 
@@ -104,12 +104,7 @@ const selectByIdJogoDesenvolvedor = async function(id){
 
 const selectDesenvolvedorByIdJogo = async function(idJogo){
   try {
-      let sql = `select tbl_desenvolvedores.* from tbl_jogo 
-                          inner join tbl_jogo_desenvolvedor
-                            on tbl_jogo.id = tbl_jogo_desenvolvedor.id
-                          inner join tbl_desenvolvedores
-                            on tbl_desenvolvedores.id = tbl_jogo_desenvolvedor.id_desenvolvedor
-                      where tbl_jogo.id = ${idJogo}`
+      let sql = `select * from tbl_jogo_desenvolvedor where id = ${idJogo}`
 
       let result = await prisma.$queryRawUnsafe(sql)
 
@@ -118,18 +113,15 @@ const selectDesenvolvedorByIdJogo = async function(idJogo){
       else 
         return false
   } catch (error) {
+    console.log(error);
+    
       return false
   }
 }
 
 const selectJogoByIdDesenvolvedor = async function(idDesenvolvedor){
   try {
-      let sql = `select tbl_jogo.* from tbl_jogo 
-                          inner join tbl_jogo_desenvolvedor
-                            on tbl_jogo.id = tbl_jogo_desenvolvedor.id
-                          inner join tbl_desenvolvedores
-                            on tbl_desenvolvedores.id = tbl_jogo_desenvolvedor.id_desenvelvedor
-                      where tbl_desenvolvedores.id = ${idDesenvolvedor}`
+      let sql = `select * from tbl_jogo_desenvolvedor where id_desenvolvedor = ${idDesenvolvedor}`
 
       let result = await prisma.$queryRawUnsafe(sql)
 
@@ -138,6 +130,7 @@ const selectJogoByIdDesenvolvedor = async function(idDesenvolvedor){
       else 
         return false
   } catch (error) {
+    
       return false
   }
 }

@@ -10,6 +10,7 @@
 const MESSAGE = require('../../modulo/config.js')
 
 const JogoDesenvolvedorDAO = require('../../model/DAO/jogo_desenvolvedor.js')
+const controllerdesenvolvedores = require('../desenvolvedores/controllerdesenvolvedores.js')
 
 const inserirJogoDesenvolvedor = async function(JogoDesenvolvedor, contentType){
    try {
@@ -17,7 +18,7 @@ const inserirJogoDesenvolvedor = async function(JogoDesenvolvedor, contentType){
 
    
    if(
-        JogoDesenvolvedor.id_filme              == ''           || JogoDesenvolvedor.id_filme     == undefined    || JogoDesenvolvedor.id_filme  == null || isNaN(JogoDesenvolvedor.id_filme)  || JogoDesenvolvedor.id_filme <=0 ||
+        JogoDesenvolvedor.id              == ''           || JogoDesenvolvedor.id     == undefined    || JogoDesenvolvedor.id  == null || isNaN(JogoDesenvolvedor.id)  || JogoDesenvolvedor.id <=0 ||
         JogoDesenvolvedor.id_desenvolvedor            == ''           || JogoDesenvolvedor.id_desenvolvedor    == undefined    || JogoDesenvolvedor.id_desenvolvedor == null || isNaN(JogoDesenvolvedor.id_desenvolvedor) || JogoDesenvolvedor.id_desenvolvedor<=0
               
    ){
@@ -60,12 +61,12 @@ const atualizarJogoDesenvolvedor = async function(id, JogoDesenvolvedor, content
                         if(resultdesenvolvedor.length > 0 ){
                             //Update
                             //Adiciona o ID do genero no JSON com os dados
-                            desenvolvedor.id_desenvolvedor = parseInt(id)
+                           JogoDesenvolvedor.id_desenvolvedor = parseInt(id)
 
                             let result = await JogoDesenvolvedorDAO.updateJogoDesenvolvedor(JogoDesenvolvedor)
 
                             if(result){
-                                return MESSAGE.SUCCESS_UPDATED_ITEM //200
+                                return MESSAGE.SUCESS_UPDATE_ITEM//200
                             }else{
                                 return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
                             }
@@ -176,6 +177,7 @@ const buscarJogoDesenvolvedor = async function(id){
 
 const buscarDesenvolvedorPorJogo = async function(idJogo){
     try {
+        let arrayDesenvolvedores = []
         if(idJogo == '' || idJogo == undefined || idJogo == null || isNaN(idJogo) || idJogo <=0){
             return MESSAGE.ERROR_REQUIRED_FIELDS //400
         }else{
@@ -188,7 +190,21 @@ const buscarDesenvolvedorPorJogo = async function(idJogo){
                      //Criando um JSON de retorno de dados para a API
                     dadosDesenvolvdor.status = true
                     dadosDesenvolvdor.status_code = 200
-                    dadosDesenvolvdor.Desenvolvedores = resultdesenvolvedor
+
+                    for(item of resultdesenvolvedor ){
+                        
+                        let dadosDesenvolvdor = await controllerdesenvolvedores.buscarDesenvolvedor(item.id_desenvolvedor)
+                
+                        item.desenvolvedores = dadosDesenvolvdor.Desenvolvedores
+                        
+                        delete item.id_desenvolvedor
+                        delete item.id
+                       delete item.id_jogo_desenvolvedor
+            
+                        arrayDesenvolvedores.push(item)
+                    }
+                    
+                    dadosDesenvolvdor.Desenvolvedores = arrayDesenvolvedores
 
                     return dadosDesenvolvdor //200
                 }else{
@@ -200,6 +216,7 @@ const buscarDesenvolvedorPorJogo = async function(idJogo){
         }
 
     } catch (error) {
+        
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 }
